@@ -3,7 +3,7 @@ import math
 import numpy as np
 
 f_x = lambda x: x - math.cos(x)
-df_x = lambda x: 1 + math.sin(x)
+df_x = lambda x: 1 - 0.2 * math.cos(x)
 g_x = lambda x: x - (f_x(x) / df_x(x))
 
 
@@ -47,7 +47,7 @@ def secant_method(p_n_2, p_n_1, f_x, error, n):
     print("Resultados Método de la Secante")
     print("| i | p_{n-2} |  p_{n-1} | p_n | error |")
 
-    q_n_2, q_n_1, i = (f_x(p_n_2), f_x(p_n_1), 0)
+    q_n_2, q_n_1, i = (f_x(p_n_2), f_x(p_n_1), 2)
     p_n = p_n_1 - (q_n_1 * (p_n_1 - p_n_2)) / (q_n_1 - q_n_2)
     while abs(p_n - p_n_1) > error:
 
@@ -87,17 +87,15 @@ def false_position_method(p_n_2, p_n_1, f_x, error, n):
     print("Resultados Método del Punto Falso")
     print("| i | p_{n-2} |  p_{n-1} | p_n | error |")
 
-    q_n_2, q_n_1, i = (f_x(p_n_2), f_x(p_n_1), 0)
+    q_n_2, q_n_1, i = (f_x(p_n_2), f_x(p_n_1), 2)
     p_n = p_n_1 - (q_n_1 * (p_n_1 - p_n_2)) / (q_n_1 - q_n_2)
-    while abs(p_n - p_n_1) > error:
 
-        print(f"| {i} | {p_n_2} | {p_n_1} | {p_n} | {abs(p_n - p_n_1)} |")
+    while i <= n:
+
+        p = p_n
 
         if f_x(p_n_2) - f_x(p_n_1) == 0:
             return print(f'El método converge en los puntos {p_n_2}, {p_n_1}')
-
-        if i > n:
-            return print(f'EL método ha pasado las n={n} iteraciones')
 
         if np.sign(f_x(p_n_1)) * np.sign(f_x(p_n)) == 1:
             return print(f'f({p_n_1}) * f({p_n}) es mayor que 0')
@@ -113,13 +111,18 @@ def false_position_method(p_n_2, p_n_1, f_x, error, n):
         q_n_2, q_n_1 = (f_x(p_n_2), f_x(p_n_1))
         p_n = p_n_1 - (q_n_1 * (p_n_1 - p_n_2)) / (q_n_1 - q_n_2)
 
+        print(f"| {i} | {p_n_2} | {p_n_1} | {p_n} | {abs(p_n - p)} |")
+
+        if abs(p_n - p) < error:
+            return print(f'la aproximación de p es {p_n}')
+
         i += 1
 
-    print(f'la aproximación de p es {p_n}')
+    return print(f'EL método ha pasado las n={n} iteraciones')
 
 
-newton_method(0, g_x, 0.00001, 20)
+# newton_method(0, g_x, 0.00001, 20)
+# print("______________________________________________")
+# secant_method(p_n_2=0, p_n_1= math.pi / 2, f_x=f_x, error=0.00001, n=20)
 print("______________________________________________")
-"""secant_method(math.pi / 4, 4, f_x, 0.00001, 20)
-print("______________________________________________")
-false_position_method(math.pi / 4, 4, f_x, 0.00001, 20)  """
+false_position_method(p_n_2=0, p_n_1=math.pi / 2, f_x=f_x, error=0.00001, n=20)
