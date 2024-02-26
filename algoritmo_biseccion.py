@@ -1,7 +1,7 @@
 import numpy as np
 
 # Función para determinar f(x)
-f_x = lambda x: x ** 3 - 7 * x ** 2 + 14 * x - 6
+f_x = lambda x: (x ** 3) + (4 * x ** 2) - 10
 
 
 # Función algoritmo de bisección
@@ -19,30 +19,34 @@ def bisection_error_abs(a, b, func, error):
         print(f'Un cero de la función es {b}')
         return
 
-    print("| a_i | b_i | p_i | fp_i | Error abs | Error Rel |")
-
+    print("| i | a_i | b_i | p_n | fp_n | Error abs |")
+    i = 1
+    pn_1 = a
     # Bucle principal del método de bisección
     while True:
-        fa, fb = func(a), func(b)
-        p_i = (a + b) / 2
-        fc = func(p_i)
 
-        print(f"| {a} | {b} | {p_i} | {fc} |", end="")
+        fa, fb = func(a), func(b)
+        p_n = (a + b) / 2
+        fc = func(p_n)
+
+        error_abs = abs(p_n - pn_1)
+
+        print(f"| {i} | {a} | {b} | {p_n} | {fc} | {error_abs} ")
 
         # Actualiza los extremos del intervalo según el signo de la función en el punto medio
         if np.sign(fa) * np.sign(fc) == 1:
-            a = p_i
+            a = p_n
         elif np.sign(fb) * np.sign(fc) == 1:
-            b = p_i
+            b = p_n
         else:
             break
 
-        print(f"{abs((a + b) / 2 - p_i):,.10f} | {abs((a + b) / 2 - p_i) / abs((a + b) / 2):,.10f} |")
+        if error_abs <= error:
+            return
 
-        # Condición de terminación del bucle
-        if abs((a + b) / 2 - p_i) < error or abs((a + b) / 2 - p_i) / abs((a + b) / 2) < error:
-            break
+        pn_1 = p_n
+        i += 1
 
 
 # Llama a la función bisection_error_abs con los valores iniciales
-bisection_error_abs(0, 1, f_x, 0.01)
+bisection_error_abs(1, 2, f_x, 0.00001)
